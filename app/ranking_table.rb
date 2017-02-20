@@ -7,12 +7,12 @@ class RankingTable
     @rows = []
   end
 
-  def add_match(match)
-    first_team_pts, second_team_pts = *GoalsToPointsConvertor.convert(
-      match.first_team[:goals], match.second_team[:goals]
+  def add_match_result(result)
+    first_team_pts, second_team_pts = *GoalsToPointsConverter.convert(
+      result.first_team[:goals], result.second_team[:goals]
     )
-    get_or_add_row(match.first_team[:name]).add_points first_team_pts
-    get_or_add_row(match.second_team[:name]).add_points second_team_pts
+    get_or_add_row(result.first_team[:name]).add_points first_team_pts
+    get_or_add_row(result.second_team[:name]).add_points second_team_pts
   end
 
   def print
@@ -22,7 +22,7 @@ class RankingTable
     end
   end
 
-  def sort
+  def sort_rows
     @rows.sort! do |x, y|
       res = y.points <=> x.points
       res == 0 ? x.team_name <=> y.team_name : res
@@ -45,11 +45,11 @@ class RankingTable
   private
 
     def get_or_add_row(team_name)
-      index = @rows.index { |r| r.team_name == team_name }
-      unless index
-        @rows.push Row.new(team_name)
-        index = @rows.length - 1
+      row = @rows.find { |r| r.team_name == team_name }
+      unless row
+        row = Row.new(team_name)
+        @rows.push row
       end
-      @rows[index]
+      row
     end
 end

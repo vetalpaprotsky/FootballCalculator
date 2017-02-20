@@ -1,4 +1,4 @@
-module GoalsToPointsConvertor
+module GoalsToPointsConverter
   def convert(a, b)
     if a > b
       [3, 0]
